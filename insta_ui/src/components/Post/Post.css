@@ -1,0 +1,28 @@
+.ant-card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.ant-carousel .slick-next::before {
+    align-self: center;
+}
+.ant-carousel .slick-prev::before {
+    align-self: center;
+}
+.ant-carousel .slick-slide {
+    overflow: scroll;
+    height: 80vh;
+    background: #fff;
+  }
+.ant-modal-content {
+    max-height: 90vh;
+    overflow: hidden;
+}
+.ant-carousel .slick-slide div {
+    color: #fff;
+}
+.ant-image {
+    align-self: center !important;
+}
+  

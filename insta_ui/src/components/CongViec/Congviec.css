@@ -1,0 +1,8 @@
+.listPost {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.listPost > div {
+    width: 22% ;
+}
