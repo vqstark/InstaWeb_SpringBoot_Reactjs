@@ -33,6 +33,31 @@ export const loginAction = (userData, history)  => (dispatch) => {
     })
 }
 
+export const signupUser = (newUserData, history) => (dispatch) => {
+  console.log("newUserData", newUserData);
+  dispatch({ type: SET_LOADING });
+  axios
+    .post("/register", newUserData)
+    .then((res) => {
+      // setAuthorizationHeader(res.data.token);
+      // dispatch(getUserData());
+      // history.push("/login");
+      window.location.href = '/login';
+      message.success("Đăng ký thành công");
+      dispatch({ type: CLEAR_LOADING });
+    })
+    .catch((err) => {
+      if(err.response.status == 400) {
+        message.error(err.response.data)
+      }
+      console.log(err.response);
+      // dispatch({
+      //   type: SET_ERRORS,
+      //   payload: err.response.data,
+      // });
+    });
+};
+
 export const getUserData = () => (dispatch) => {
     axios
       .get("http://localhost:8080/user/getInfo")
@@ -98,6 +123,15 @@ export const getFriendRequests = () => (dispatch) => {
     })
     .catch(e => console.log("=>>", e))
   };
+
+export const sendFriendRequest = (id) => {
+  axios.post(`http://localhost:8080/friends/${id}/add`).then(res => {
+      console.log("=>>>>sendFriendRequest",res);
+      message.success("Gửi thành công");
+      // dispatch({ type: GET_FRIEND_REQUESTS, payload: res.data.listUserSummary });
+    })
+    .catch(e => console.log("=>>", e))
+};
 
 export const removeFriend = (id) => (dispatch) => {
   axios.post(`http://localhost:8080/friends/${id}/remove`).then(res => {

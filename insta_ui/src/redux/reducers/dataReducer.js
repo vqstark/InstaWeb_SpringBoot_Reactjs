@@ -28,12 +28,12 @@ export default function (state = initialState, action) {
       };
     case LIKE_POST:
     case UNLIKE_POST:
-      let index = state.posts.findIndex(
-        (post) => post.postId === action.payload.postId
-      );
-      state.posts[index] = action.payload;
-      state.post = { ...state.post, likeCount: action.payload.likeCount };
-      return { ...state };
+      // let index = state.posts.findIndex(
+      //   (post) => post.postId === action.payload.postId
+      // );
+      // state.posts[index] = action.payload;
+      // state.post = { ...state.post, likeCount: action.payload.likeCount };
+      // return { ...state };
     case SET_POST:
       return {
         ...state,

@@ -15,6 +15,9 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post,Long> {
     Optional<Post> findById(Long postId);
 
+    @Query("SELECT p from Post p where p.id = :postId")
+    Post findById1(Long postId);
+
     Page<Post> findByCreatedBy(Long userId, Pageable pageable);
 
     List<Post> findAll();

@@ -1,6 +1,7 @@
 package com.example.insta.util;
 
 import com.example.insta.entity.post.Comment;
+import com.example.insta.entity.post.Likee;
 import com.example.insta.entity.post.Post;
 import com.example.insta.entity.user.User;
 import com.example.insta.payload.Friend.FriendListResponse;
@@ -10,6 +11,7 @@ import com.example.insta.payload.User.UserSummary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModalMapper {
     public static CommentResponse mapCommentToCommentResponse(Comment comment, User author) {
@@ -31,7 +33,7 @@ public class ModalMapper {
         return commentResponse;
     }
 
-    public static PostResponse mapCommentToPostResponse(Post post, User author) {
+    public static PostResponse mapPostToPostResponse(Post post, User author, List<Likee> likes) {
         PostResponse postResponse = new PostResponse();
 
         postResponse.setId(post.getId());
@@ -39,6 +41,8 @@ public class ModalMapper {
         postResponse.setTitle(post.getTitle());
         postResponse.setImagePath(post.getImagePath());
         postResponse.setCreatedAt(post.getCreatedAt());
+        postResponse.setLikes(likes);
+
         UserSummary userSummary = new UserSummary();
         userSummary.setId(author.getId());
         userSummary.setEmail(author.getEmail());

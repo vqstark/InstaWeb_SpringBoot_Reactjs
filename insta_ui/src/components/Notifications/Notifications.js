@@ -39,7 +39,7 @@ const Notifications = (props) => {
 
   return (
     <div className='wrapper'>
-        <div className="Notifications">Thông Báo</div>
+        <div className="Notifications" style={{fontSize:"28px", color: "black"}}>Thông Báo</div>
         <p className="outline"><i className="ion-ios-plus-outline"></i></p>
 
         <div className='notificationLight' onClick={showModal}>

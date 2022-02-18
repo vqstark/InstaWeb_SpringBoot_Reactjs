@@ -1,12 +1,15 @@
 package com.example.insta.service.impl;
 
 import com.example.insta.entity.post.Comment;
+import com.example.insta.entity.post.Likee;
 import com.example.insta.entity.post.Post;
 import com.example.insta.entity.user.User;
 import com.example.insta.payload.ApiResponse;
 import com.example.insta.payload.Post.request.CommentRequest;
 import com.example.insta.payload.Post.request.PostRequest;
 import com.example.insta.payload.Post.response.PostResponse;
+import com.example.insta.repository.Post.CommentRepository;
+import com.example.insta.repository.Post.LikeRepository;
 import com.example.insta.repository.Post.PostRepository;
 import com.example.insta.repository.UserRepository;
 import com.example.insta.service.CommentService;
@@ -33,6 +36,12 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Autowired
+    private LikeRepository likeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -46,6 +55,24 @@ public class PostServiceImpl implements PostService {
     public ResponseEntity<?> addComment(User currentUser, Long postID, CommentRequest commentRequest) throws Exception {
         Comment comment = commentService.commentPost(postID, commentRequest, currentUser);
         return ResponseEntity.ok(comment);
+    }
+
+    @Override
+    public ResponseEntity<?> likePost(Long postID, User currentUser) {
+        Likee like = new Likee();
+        like.setPost(postRepository.findById1(postID));
+        like.setUser(currentUser);
+        likeRepository.save(like);
+        return ResponseEntity.ok(like);
+    }
+
+    @Override
+    public ResponseEntity<?> unlikePost(Long postID, User currentUser) {
+        Likee like = new Likee();
+        like.setPost(postRepository.findById1(postID));
+        like.setUser(currentUser);
+        likeRepository.delete(like);
+        return ResponseEntity.ok(like);
     }
 
     @Override
@@ -84,14 +111,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponseEntity<?> getAllPosts() {
         List<Post> posts = postRepository.findAll();
-        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapCommentToPostResponse(post, userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
+        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
+                userRepository.findById1(post.getCreatedBy()),
+                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 
     @Override
     public ResponseEntity<?> getAllPostsById(Long userId) {
         List<Post> posts = postRepository.findAllPostByCreate(userId);
-        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapCommentToPostResponse(post, userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
+        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
+                userRepository.findById1(post.getCreatedBy()),
+                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 
@@ -99,7 +130,9 @@ public class PostServiceImpl implements PostService {
     @Override
     public ResponseEntity<?> getMyPosts(User user) {
         List<Post> posts = postRepository.findAllPostByCreate(user.getId());
-        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapCommentToPostResponse(post, userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
+        List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
+                userRepository.findById1(post.getCreatedBy()),
+                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 

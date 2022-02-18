@@ -12,6 +12,10 @@ import java.util.List;
 public interface PostService {
     ResponseEntity<?> addComment(User user, Long postID, CommentRequest commentRequest) throws Exception;
 
+    ResponseEntity<?> likePost(Long postId, User currentUser);
+
+    ResponseEntity<?> unlikePost(Long postId, User currentUser);
+
     ResponseEntity<?> createPost(PostRequest postRequest, MultipartFile[] image, User currentUser);
 
     ResponseEntity<?> getAllPosts();

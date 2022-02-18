@@ -6,6 +6,7 @@ import com.example.insta.entity.user.User;
 import com.example.insta.payload.Post.request.CommentRequest;
 import com.example.insta.payload.Post.response.CommentResponse;
 import com.example.insta.repository.Post.CommentRepository;
+import com.example.insta.repository.Post.LikeRepository;
 import com.example.insta.repository.Post.PostRepository;
 import com.example.insta.util.ModalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import java.util.stream.Collectors;
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     @Autowired
     private PostRepository postRepository;

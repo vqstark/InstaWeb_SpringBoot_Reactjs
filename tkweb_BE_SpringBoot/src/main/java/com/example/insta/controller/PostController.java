@@ -74,6 +74,18 @@ public class PostController {
         return commentService.loadComments(postID);
     }
 
+    @PostMapping("/{postID}/like")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity<?> likePost(@PathVariable long postID){
+        return postService.likePost(postID, getCurrentUser());
+    }
+
+    @PostMapping("/{postID}/unlike")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public ResponseEntity<?> unlikePost(@PathVariable long postID){
+        return postService.unlikePost(postID, getCurrentUser());
+    }
+
     private User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
