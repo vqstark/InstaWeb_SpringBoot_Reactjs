@@ -127,7 +127,7 @@ export const getFriendRequests = () => (dispatch) => {
 export const sendFriendRequest = (id) => {
   axios.post(`http://localhost:8080/friends/${id}/add`).then(res => {
       console.log("=>>>>sendFriendRequest",res);
-      message.success("Gửi thành công");
+      message.success("Send Successfully!");
       // dispatch({ type: GET_FRIEND_REQUESTS, payload: res.data.listUserSummary });
     })
     .catch(e => console.log("=>>", e))
