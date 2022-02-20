@@ -5,7 +5,9 @@ import com.example.insta.entity.user.User;
 import com.example.insta.payload.Post.request.CommentRequest;
 import com.example.insta.payload.Post.request.PostRequest;
 import com.example.insta.payload.Post.response.CommentResponse;
+import com.example.insta.payload.Post.response.LikeResponse;
 import com.example.insta.service.CommentService;
+import com.example.insta.service.LikeService;
 import com.example.insta.service.PostService;
 import com.example.insta.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class PostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     @Autowired
     private UserService userService;
@@ -74,6 +79,12 @@ public class PostController {
         return commentService.loadComments(postID);
     }
 
+    @GetMapping("/{postID}/likes")
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public List<LikeResponse> loadLikes(@PathVariable long postID){
+        return likeService.loadLikes(postID);
+    }
+
     @PostMapping("/{postID}/like")
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<?> likePost(@PathVariable long postID){
@@ -91,4 +102,5 @@ public class PostController {
         String username = auth.getName();
         return userService.findByUserName(username);
     }
+
 }

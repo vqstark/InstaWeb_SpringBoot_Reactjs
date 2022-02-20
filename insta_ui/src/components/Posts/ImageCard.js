@@ -30,14 +30,15 @@ import {
     getPost,
     deletePost,
     submitComment,
-    getComment
+    getComment,
+    getLike
 } from "../../redux/action/dataAction";
 import {sendFriendRequest} from "../../redux/action/userAction";
 import Modal from "antd/lib/modal/Modal";
 import PostDetails from "../PostDetails/PostDetails";
 import { config } from "../../config/constants";
 const { Meta } = Card;
-const ImageCard = ({ post, user, postDetail, likePost, unlikePost, submitComment, getComment, deletePost, data }) => {
+const ImageCard = ({ post, user, postDetail, likePost, unlikePost, submitComment, getComment, getLike, deletePost, data }) => {
     console.log("data", data);
     console.log("post", post);
     console.log("user", user)
@@ -124,6 +125,7 @@ const ImageCard = ({ post, user, postDetail, likePost, unlikePost, submitComment
       }
     const showModal = () => {
         getComment(data.post.id);
+        getLike(data.post.id);
         // setVisible(true);
         setIsModalVisible(true);
     };
@@ -134,6 +136,14 @@ const ImageCard = ({ post, user, postDetail, likePost, unlikePost, submitComment
 
     const hideButtonAdd = () => {
         setIsButtonAddVisible(false);
+    }
+
+    const handleLike = () => {
+        likePost(data.post.id);
+    }
+
+    const handleUnlike = () => {
+        unlikePost(data.post.id);
     }
 
     const handleAdd = () => {
@@ -211,32 +221,30 @@ const ImageCard = ({ post, user, postDetail, likePost, unlikePost, submitComment
                             <hr />
                         </div>
                         <div className="actions" style={{ marginTop: "20px", display: "flex", justifyContent:"space-between" }}>
-                            {/* <div className="d-flex" style={{flexDirection: "column", flexGrow:1}}> */}
-                                {true === true ? (
-                                    <Badge showZero count={data.post.likes.length}>
-                                        <HeartFilled
-                                            // disabled={true}
-                                            style={{ fontSize: "20px" }}
+                            {postDetail.like ? (
+                                (postDetail.like.some((like)=>like.userSummary.id===user.credentials.id)) ? (
+                                    <Badge showZero count={postDetail.like.length} onClick={handleUnlike}>
+                                        <HeartFilled style={{ fontSize: "20px" }}
                                         />
                                     </Badge>
                                 ) : (
-                                    <Badge showZero count={data.post.likes.length}>
+                                    <Badge showZero count={postDetail.like.length} onClick={handleLike}>
                                         <HeartOutlined style={{ fontSize: "20px" }} />
                                     </Badge>
-                                )}
-                            {/* </div> */}
+                                )) : (
+                                    <Badge showZero count={0}>
+                                        <HeartOutlined style={{ fontSize: "20px" }} />
+                                    </Badge>
+                                )
+                            }
 
-                            {/* <div className="d-flex" style={{flexDirection: "column", flexGrow: 1}}> */}
-                                <Badge showZero count={(postDetail.comment) ? postDetail.comment.length : 0} style={{flexDirection: "column", flexGrow:1}}>
-                                    <MessageOutlined style={{ fontSize: "20px" }} />
-                                </Badge>
-                            {/* </div> */}
+                            <Badge showZero count={(postDetail.comment) ? postDetail.comment.length : 0} style={{flexDirection: "column", flexGrow:1}}>
+                                <MessageOutlined style={{ fontSize: "20px" }} />
+                            </Badge>
 
-                            {/* <div className="d-flex" style={{flexDirection: "column", flexGrow: 1}}> */}
-                                <Badge count={0} style={{flexDirection: "column", flexGrow:1}}>
-                                    <ShareAltOutlined style={{ fontSize: "20px"}} />
-                                </Badge>
-                            {/* </div> */}
+                            <Badge count={0} style={{flexDirection: "column", flexGrow:1}}>
+                                <ShareAltOutlined style={{ fontSize: "20px"}} />
+                            </Badge>
 
                         </div>
                         <hr />
@@ -291,6 +299,7 @@ const mapActionsToProps = {
     sendFriendRequest,
     submitComment,
     getComment,
+    getLike,
     deletePost,
 };
 

@@ -14,9 +14,11 @@ import java.util.Optional;
 @Repository
 public interface LikeRepository extends JpaRepository<Likee, Long> {
     @Query("SELECT l FROM Likee l where l.post.id = :postId and l.user.id = :userId")
-    Optional<Likee> findLikeByPostIdByUserId(@Param("userId") Long userId, @Param("postId") Long postId);
+    Likee findLikeByPostIdByUserId(@Param("userId") Long userId, @Param("postId") Long postId);
 
     List<Likee> findAllByPostId(Long postId);
+
+    Likee findByUserIdAndPostId(Long userId, Long postId);
 
     Page<Likee> findByPostId(Long postId, Pageable pageable);
 

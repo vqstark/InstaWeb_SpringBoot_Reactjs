@@ -52,6 +52,7 @@ export default function (state = initialState, action) {
             {
               userHandle: action.payload.handle,
               postId: action.payload.postId,
+              authorId: action.payload.userId
             },
           ],
         };

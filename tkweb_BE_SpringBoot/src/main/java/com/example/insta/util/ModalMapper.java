@@ -6,6 +6,7 @@ import com.example.insta.entity.post.Post;
 import com.example.insta.entity.user.User;
 import com.example.insta.payload.Friend.FriendListResponse;
 import com.example.insta.payload.Post.response.CommentResponse;
+import com.example.insta.payload.Post.response.LikeResponse;
 import com.example.insta.payload.Post.response.PostResponse;
 import com.example.insta.payload.User.UserSummary;
 
@@ -33,7 +34,32 @@ public class ModalMapper {
         return commentResponse;
     }
 
-    public static PostResponse mapPostToPostResponse(Post post, User author, List<Likee> likes) {
+    public static LikeResponse mapLikeToLikeResponse(Likee like, User author) {
+
+        LikeResponse likeResponse = new LikeResponse();
+        likeResponse.setId(like.getId());
+        likeResponse.setCreatedAt(like.getCreatedAt());
+        likeResponse.setCreatedBy(like.getCreatedBy());
+
+        UserSummary userSummary = new UserSummary();
+        userSummary.setId(author.getId());
+        userSummary.setEmail(author.getEmail());
+        userSummary.setUsername(author.getUsername());
+        userSummary.setFullName(author.getFullName());
+        userSummary.setPhoneNumber(author.getPhoneNumber());
+        likeResponse.setUserSummary(userSummary);
+        return likeResponse;
+    }
+
+    public static List<LikeResponse> mapLikeListToLikeResponseList(List<Likee> likes) {
+        List<LikeResponse> likeResponses = likes.stream().map(like -> {
+            return mapLikeToLikeResponse(like, like.getUser());
+        }).collect(Collectors.toList());
+        return likeResponses;
+//        return null;
+    }
+
+    public static PostResponse mapPostToPostResponse(Post post, User author) {
         PostResponse postResponse = new PostResponse();
 
         postResponse.setId(post.getId());
@@ -41,7 +67,6 @@ public class ModalMapper {
         postResponse.setTitle(post.getTitle());
         postResponse.setImagePath(post.getImagePath());
         postResponse.setCreatedAt(post.getCreatedAt());
-        postResponse.setLikes(likes);
 
         UserSummary userSummary = new UserSummary();
         userSummary.setId(author.getId());

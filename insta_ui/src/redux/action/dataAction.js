@@ -10,6 +10,7 @@ import {
   SET_POST,
   DELETE_POST,
   SET_POST_COMMENT,
+  SET_POST_LIKE
 } from "../type";
 import axios from "axios";
 import { message } from "antd";
@@ -51,6 +52,7 @@ export const likePost = (postId) => (dispatch) => {
   axios
     .post(`/post/${postId}/like`)
     .then((res) => {
+      console.log("likePost", res);
       dispatch({
         type: LIKE_POST,
         payload: res.data,
@@ -62,6 +64,7 @@ export const unlikePost = (postId) => (dispatch) => {
   axios
     .post(`/post/${postId}/unlike`)
     .then((res) => {
+      console.log("likePost", res);
       dispatch({
         type: UNLIKE_POST,
         payload: res.data,
@@ -94,6 +97,24 @@ export const getComment = (postId) => (dispatch) => {
       dispatch({ type: SET_POST_COMMENT, payload: {
         postId: postId,
         comment:dat
+      } });
+      dispatch({ type: CLEAR_LOADING });
+    })
+    .catch((err) => {
+      console.log(err.response);
+      dispatch({ type: CLEAR_LOADING });
+    });
+};
+
+export const getLike = (postId) => (dispatch) => {
+  dispatch({ type: SET_LOADING });
+  axios
+    .get(`/post/${postId}/likes`)
+    .then((res) => {
+      console.log("=>>>res like", res.data);
+      dispatch({ type: SET_POST_LIKE, payload: {
+        postId: postId,
+        like:res.data
       } });
       dispatch({ type: CLEAR_LOADING });
     })

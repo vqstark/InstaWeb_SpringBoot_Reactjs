@@ -7,6 +7,7 @@ import {
   SUBMIT_COMMENT,
   DELETE_POST,
   SET_POST_COMMENT,
+  SET_POST_LIKE
 } from "../type";
 
 const initialState = {
@@ -45,6 +46,12 @@ export default function (state = initialState, action) {
       return {
         ...state
       };
+      case SET_POST_LIKE:
+        state.post = { ...state.post, like: action.payload.like };
+        console.log("state", state);
+        return {
+          ...state
+        };
 
     case SUBMIT_COMMENT:
       return {

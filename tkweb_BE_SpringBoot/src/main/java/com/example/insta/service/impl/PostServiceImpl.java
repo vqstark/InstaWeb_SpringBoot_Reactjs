@@ -15,6 +15,7 @@ import com.example.insta.repository.UserRepository;
 import com.example.insta.service.CommentService;
 import com.example.insta.service.FilesStorageService;
 import com.example.insta.service.PostService;
+import com.example.insta.service.UserService;
 import com.example.insta.util.ModalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +49,9 @@ public class PostServiceImpl implements PostService {
     private CommentService commentService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private FilesStorageService filesStorageService;
 
 
@@ -68,11 +72,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<?> unlikePost(Long postID, User currentUser) {
-        Likee like = new Likee();
-        like.setPost(postRepository.findById1(postID));
-        like.setUser(currentUser);
+        Likee like = likeRepository.findLikeByPostIdByUserId(currentUser.getId(), postID);
         likeRepository.delete(like);
-        return ResponseEntity.ok(like);
+        return ResponseEntity.ok("");
     }
 
     @Override
@@ -112,8 +114,7 @@ public class PostServiceImpl implements PostService {
     public ResponseEntity<?> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
-                userRepository.findById1(post.getCreatedBy()),
-                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
+                userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 
@@ -121,8 +122,7 @@ public class PostServiceImpl implements PostService {
     public ResponseEntity<?> getAllPostsById(Long userId) {
         List<Post> posts = postRepository.findAllPostByCreate(userId);
         List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
-                userRepository.findById1(post.getCreatedBy()),
-                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
+                userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 
@@ -131,10 +131,11 @@ public class PostServiceImpl implements PostService {
     public ResponseEntity<?> getMyPosts(User user) {
         List<Post> posts = postRepository.findAllPostByCreate(user.getId());
         List<PostResponse> postResponses = posts.stream().map(post -> { return ModalMapper.mapPostToPostResponse(post,
-                userRepository.findById1(post.getCreatedBy()),
-                likeRepository.findAllByPostId(post.getId()));}).collect(Collectors.toList());
+                userRepository.findById1(post.getCreatedBy()));}).collect(Collectors.toList());
         return ResponseEntity.ok(postResponses);
     }
 
-
+    private User getUserComment(Long userId){
+        return userService.findById(userId);
+    }
 }

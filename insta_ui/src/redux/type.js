@@ -27,4 +27,5 @@ export const UNLIKE_POST = "UNLIKE_POST";
 export const SUBMIT_COMMENT = "SUBMIT_COMMENT";
 export const DELETE_POST = "DELETE_POST";
 export const SET_POST_COMMENT = "SET_POST_COMMENT";
+export const SET_POST_LIKE = "SET_POST_LIKE";
 
